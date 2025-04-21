@@ -17,7 +17,7 @@
          </padding></VBox>
    </right>
    <center>
-      <Pane fx:id="gamePane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #eff1f5;" BorderPane.alignment="CENTER">
+      <Pane fx:id="gamePane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #007B40;" BorderPane.alignment="CENTER">
          <children>
             <Line endX="-100.0" endY="366.5999755859375" layoutX="698.0" layoutY="183.0" startX="-100.0" startY="-183.0" />
             <Line endX="-99.99996948242188" endY="386.5999755859375" layoutX="593.0" layoutY="163.0" startX="-99.99996948242188" startY="-163.0" />
@@ -26,7 +26,7 @@
          </children></Pane>
    </center>
    <left>
-      <VBox fx:id="triangleBox" alignment="CENTER" prefWidth="50.0" spacing="10.0" style="-fx-background-color: #fddc5c;" BorderPane.alignment="CENTER">
+      <VBox fx:id="triangleBox" alignment="CENTER" prefWidth="50.0" spacing="10.0" style="-fx-background-color: #C3AA47;" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin></VBox>

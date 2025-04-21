@@ -18,7 +18,6 @@ import java.util.Random;
 
 import static java.lang.Math.sqrt;
 
-
 public class GameServer {
     public static final Gson gson = new Gson();
     private static final Random rand = new Random();
@@ -27,10 +26,6 @@ public class GameServer {
             "#FF4500", // Оранжево-красный
             "#32CD32", // Зеленый
             "#8B008B", // Темно-пурпурный
-            "#FFD700", // Золотой
-            "#00CED1", // Бирюзовый
-            "#FF1493", // Ярко-розовый
-            "#228B22"  // Темно-зеленый
     };
     private static final double height = 540;
     private static final double width = 650;
