@@ -88,7 +88,7 @@ public class GameClient {
             if (p.wantToStart) triangle.setStroke(Color.BLACK);
             triangleBox.getChildren().add(triangle);
 
-            Label score = new Label(p.nickname + " score:");
+            Label score = new Label(p.nickname + " очки:");
             score.setTextFill(Color.valueOf("#4c4f69"));
             score.setId(p.nickname + "Score");
 
@@ -96,7 +96,7 @@ public class GameClient {
             scoreCount.setTextFill(Color.valueOf("#4c4f69"));
             scoreCount.setId(p.nickname + "ScoreCount");
 
-            Label shots = new Label(p.nickname + " shots:");
+            Label shots = new Label(p.nickname + " выстрелы:");
             shots.setTextFill(Color.valueOf("#4c4f69"));
             shots.setId(p.nickname + "Shots");
 
@@ -104,7 +104,7 @@ public class GameClient {
             shotsCount.setTextFill(Color.valueOf("#4c4f69"));
             shotsCount.setId(p.nickname + "ShotsCount");
 
-            Label wins = new Label(p.nickname + " wins:");
+            Label wins = new Label(p.nickname + " победы:");
             wins.setTextFill(Color.valueOf("#4c4f69"));
             wins.setId(p.nickname + "Wins");
 
@@ -206,7 +206,7 @@ public class GameClient {
     public void showWinner(PlayerInfo p) {
         Platform.runLater(() -> {
             setWins(p);
-            String info = "Congratulations to " + p.nickname + "!\n" + p.nickname + " won with " + p.score + " score.";
+            String info = p.nickname + " победил!\n" + p.nickname + " выиграл со счетом " + p.score + " очков.";
             Alert alert = new Alert(Alert.AlertType.INFORMATION, info);
             alert.show();
         });
@@ -239,7 +239,7 @@ public class GameClient {
 
     public void showStop() {
         Platform.runLater(() -> {
-            String info = "The game was urgently stopped due to the player's exit.";
+            String info = "Игра прекратилась, т.к. другой игрок вышел.";
             Alert alert = new Alert(Alert.AlertType.WARNING, info);
             alert.show();
         });
@@ -248,8 +248,8 @@ public class GameClient {
     public void showLeaderboard(LeaderboardInfo info) {
         Platform.runLater(() -> {
             final TableView<PlayerInfo> tableView = new TableView<>(FXCollections.observableList(info.getAllPlayers()));
-            final TableColumn<PlayerInfo, String> nameColumn = new TableColumn<>("Name");
-            final TableColumn<PlayerInfo, Integer> winsColumn = new TableColumn<>("Wins");
+            final TableColumn<PlayerInfo, String> nameColumn = new TableColumn<>("Имя");
+            final TableColumn<PlayerInfo, Integer> winsColumn = new TableColumn<>("Победы");
             nameColumn.setCellValueFactory(new PropertyValueFactory<PlayerInfo, String>("nickname"));
             winsColumn.setCellValueFactory(new PropertyValueFactory<PlayerInfo, Integer>("wins"));
             winsColumn.setSortType(TableColumn.SortType.DESCENDING);
@@ -260,7 +260,7 @@ public class GameClient {
             Stage stage = new Stage();
             Scene scene = new Scene(tableView);
             stage.setScene(scene);
-            stage.setTitle("Leaderboard");
+            stage.setTitle("Таблица лидеров");
             stage.show();
         });
     }

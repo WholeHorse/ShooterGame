@@ -22,7 +22,16 @@ import static java.lang.Math.sqrt;
 public class GameServer {
     public static final Gson gson = new Gson();
     private static final Random rand = new Random();
-    private static final String[] colors = {"#dc8a78", "#dd7878", "#ea76cb", "#8839ef", "#d20f39", "#d20f39", "#fe640b", "#df8e1d", "#40a02b", "#179299", "#04a5e5", "#209fb5", "#1e66f5", "#7287fd"};
+    private static final String[] colors = {
+            "#1E90FF", // Ярко-синий
+            "#FF4500", // Оранжево-красный
+            "#32CD32", // Зеленый
+            "#8B008B", // Темно-пурпурный
+            "#FFD700", // Золотой
+            "#00CED1", // Бирюзовый
+            "#FF1493", // Ярко-розовый
+            "#228B22"  // Темно-зеленый
+    };
     private static final double height = 540;
     private static final double width = 650;
     private GameState state = GameState.OFF;
@@ -32,8 +41,6 @@ public class GameServer {
 
 
     public static void main(String[] args) {
-        // Удалить эту строку:
-        // SessionFactoryBuilder.getSessionFactory();
         GameServer server = new GameServer();
         server.start(7777);
     }
@@ -311,11 +318,11 @@ public class GameServer {
     public String canPlayerConnect(String nickname) {
         String response = "OK";
         if (containsNickname(nickname))
-            response = "The nickname " + nickname + " is already in use. Please enter a different nickname.\n";
+            response = "Имя " + nickname + " уже используется, введите другое.\n";
         if (gameInfo.playerList.size() == 4)
-            response = "The maximum number of players has been reached.\n";
+            response = "Максимум игроков уже достигнут.\n";
         if (isGameStarted()) {
-            response = "The game has already started. Please wait until the game ends.\n";
+            response = "Игра в процессе. Подождите, пока она завершится.\n";
         }
         return response;
     }

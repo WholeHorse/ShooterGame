@@ -25,7 +25,7 @@ public class WelcomeController {
             in = new DataInputStream(clientSocket.getInputStream());
             out = new DataOutputStream(clientSocket.getOutputStream());
         } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Server is not available.");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Сервер не доступен.");
             alert.showAndWait();
         }
     }
@@ -35,7 +35,7 @@ public class WelcomeController {
             out.writeUTF(nicknameField.getText());
             String response = in.readUTF();
             if (response.equals("OK")) {
-                FXMLLoader fxmlLoader = new FXMLLoader(MarksmanGame.class.getResource("/org/example/shootergame/marksman-game-view.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(ShooterGame.class.getResource("/org/example/shootergame/shooter-game-view.fxml"));
                 Scene scene = new Scene(fxmlLoader.load());
                 Stage stage = (Stage) nicknameField.getScene().getWindow();
                 stage.setScene(scene);
