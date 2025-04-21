@@ -1,4 +1,4 @@
-open module org.oleg_w570.marksman_game {
+open module org.example.shootergame {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -17,5 +17,9 @@ open module org.oleg_w570.marksman_game {
     // requires java.sql;
 
 //    opens org.oleg_w570.marksman_game to javafx.fxml;
-    exports org.example.shootergame;
+    exports org.example.shootergame.client;
+    exports org.example.shootergame.server;
+    exports org.example.shootergame.common;
+    exports org.example.shootergame.model;
+    exports org.example.shootergame.network;
 }
