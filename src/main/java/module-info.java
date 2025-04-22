@@ -10,13 +10,7 @@ open module org.example.shootergame {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.google.gson;
-    // Удалить следующие строки:
-    // requires org.hibernate.orm.core;
-    // requires jakarta.persistence;
-    // requires java.naming;
-    // requires java.sql;
 
-//    opens org.oleg_w570.marksman_game to javafx.fxml;
     exports org.example.shootergame.client;
     exports org.example.shootergame.server;
     exports org.example.shootergame.common;

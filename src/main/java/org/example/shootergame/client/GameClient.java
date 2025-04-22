@@ -17,7 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
-import org.example.shootergame.network.Action;
+import org.example.shootergame.network.State;
 import org.example.shootergame.model.Arrow;
 import org.example.shootergame.common.GameState;
 import org.example.shootergame.common.LeaderboardInfo;
@@ -50,27 +50,27 @@ public class GameClient {
     @FXML
     void onStartButtonClick() {
         if (state == GameState.OFF) {
-            serverHandler.sendAction(Action.Type.WantToStart);
+            serverHandler.sendAction(State.Type.WantToStart);
         }
     }
 
     @FXML
     void onPauseButtonClick() {
         if (state != GameState.OFF) {
-            serverHandler.sendAction(Action.Type.WantToPause);
+            serverHandler.sendAction(State.Type.WantToPause);
         }
     }
 
     @FXML
     void onShootButtonClick() {
         if (state == GameState.ON) {
-            serverHandler.sendAction(Action.Type.Shoot);
+            serverHandler.sendAction(State.Type.Shoot);
         }
     }
 
     @FXML
     void onLeaderboardButtonClick() {
-        serverHandler.sendAction(Action.Type.Leaderboard);
+        serverHandler.sendAction(State.Type.Leaderboard);
     }
 
 
@@ -85,8 +85,22 @@ public class GameClient {
             Polygon triangle = new Polygon(0.0, 0.0, 20.0, -20.0, 0.0, -40.0);
             triangle.setId(p.nickname + "Triangle");
             triangle.setFill(Color.valueOf(p.color));
-            if (p.wantToStart) triangle.setStroke(Color.BLACK);
             triangleBox.getChildren().add(triangle);
+
+            Label status = new Label("Статус: не готов");
+            status.setTextFill(Color.valueOf("#4c4f69"));
+            status.setId(p.nickname + "Status");
+            if (p.wantToStart) {
+                status.setText("Статус: готов");
+            }
+
+            Label wins = new Label(p.nickname + " победы:");
+            wins.setTextFill(Color.valueOf("#4c4f69"));
+            wins.setId(p.nickname + "Wins");
+
+            Label winsCount = new Label(String.valueOf(p.wins));
+            winsCount.setTextFill(Color.valueOf("#4c4f69"));
+            winsCount.setId(p.nickname + "WinsCount");
 
             Label score = new Label(p.nickname + " очки:");
             score.setTextFill(Color.valueOf("#4c4f69"));
@@ -104,15 +118,7 @@ public class GameClient {
             shotsCount.setTextFill(Color.valueOf("#4c4f69"));
             shotsCount.setId(p.nickname + "ShotsCount");
 
-            Label wins = new Label(p.nickname + " победы:");
-            wins.setTextFill(Color.valueOf("#4c4f69"));
-            wins.setId(p.nickname + "Wins");
-
-            Label winsCount = new Label(String.valueOf(p.wins));
-            winsCount.setTextFill(Color.valueOf("#4c4f69"));
-            winsCount.setId(p.nickname + "WinsCount");
-
-            VBox vbox = new VBox(0.0d, wins, winsCount, score, scoreCount, shots, shotsCount);
+            VBox vbox = new VBox(0.0d, status, wins, winsCount, score, scoreCount, shots, shotsCount);
             vbox.setBorder(Border.stroke(Color.valueOf("#4c4f69")));
             vbox.setAlignment(Pos.CENTER);
             vbox.setId(p.nickname + "VBox");
@@ -124,9 +130,15 @@ public class GameClient {
         return (Polygon) gamePane.getScene().lookup("#" + nickname + "Triangle");
     }
 
+    private Label findStatusLabel(final String nickname) {
+        return (Label) gamePane.getScene().lookup("#" + nickname + "Status");
+    }
+
     public void setPlayerWantToStart(final String nickname) {
-        Polygon playerTriangle = findTriangle(nickname);
-        playerTriangle.setStroke(Color.BLACK);
+        Platform.runLater(() -> {
+            Label statusLabel = findStatusLabel(nickname);
+            statusLabel.setText("Статус: готов");
+        });
     }
 
     public void updateGameInfo(final GameInfo gameInfo) {
@@ -185,9 +197,15 @@ public class GameClient {
     }
 
     public void updatePlayerWantToPause(final String nickname) {
-        Polygon playerTriangle = findTriangle(nickname);
-        if (playerTriangle.getStroke() == Color.BLACK) playerTriangle.setStroke(Color.WHITESMOKE);
-        else playerTriangle.setStroke(Color.BLACK);
+        Platform.runLater(() -> {
+            Label statusLabel = findStatusLabel(nickname);
+            // Переключаем статус между "на паузе" и "готов"
+            if (statusLabel.getText().equals("Статус: пауза")) {
+                statusLabel.setText("Статус: готов");
+            } else {
+                statusLabel.setText("Статус: пауза");
+            }
+        });
     }
 
     private Label findWinsCountLabel(final String nickname) {
@@ -220,7 +238,10 @@ public class GameClient {
                 setShots(p);
                 setScore(p);
                 gamePane.getChildren().remove(findArrow(p.nickname));
-                findTriangle(p.nickname).setStroke(Color.TRANSPARENT);
+
+                // Сбрасываем статус для всех игроков
+                Label statusLabel = findStatusLabel(p.nickname);
+                statusLabel.setText("Статус: не готов");
             }
         });
     }

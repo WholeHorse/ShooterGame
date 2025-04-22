@@ -1,7 +1,6 @@
 package org.example.shootergame.server;
 
 import com.google.gson.Gson;
-import org.example.shootergame.network.Action;
 import org.example.shootergame.client.GameClient;
 import org.example.shootergame.common.GameState;
 import org.example.shootergame.common.LeaderboardInfo;
@@ -51,18 +50,18 @@ public class ServerHandler extends Thread {
     private void handlingMessage() throws IOException {
         while (true) {
             String msg = in.readUTF();
-            Action action = gson.fromJson(msg, Action.class);
-            switch (action.type()) {
-                case New -> gameClient.addPlayer(gson.fromJson(action.info(), PlayerInfo.class));
-                case WantToStart -> gameClient.setPlayerWantToStart(action.info());
-                case State -> gameClient.setState(gson.fromJson(action.info(), GameState.class));
-                case Update -> gameClient.updateGameInfo(gson.fromJson(action.info(), GameInfo.class));
-                case WantToPause -> gameClient.updatePlayerWantToPause(action.info());
-                case Winner -> gameClient.showWinner(gson.fromJson(action.info(), PlayerInfo.class));
-                case Reset -> gameClient.resetGameInfo(gson.fromJson(action.info(), GameInfo.class));
-                case Remove -> gameClient.removePlayer(action.info());
+            org.example.shootergame.network.State state = gson.fromJson(msg, org.example.shootergame.network.State.class);
+            switch (state.type()) {
+                case New -> gameClient.addPlayer(gson.fromJson(state.info(), PlayerInfo.class));
+                case WantToStart -> gameClient.setPlayerWantToStart(state.info());
+                case State -> gameClient.setState(gson.fromJson(state.info(), GameState.class));
+                case Update -> gameClient.updateGameInfo(gson.fromJson(state.info(), GameInfo.class));
+                case WantToPause -> gameClient.updatePlayerWantToPause(state.info());
+                case Winner -> gameClient.showWinner(gson.fromJson(state.info(), PlayerInfo.class));
+                case Reset -> gameClient.resetGameInfo(gson.fromJson(state.info(), GameInfo.class));
+                case Remove -> gameClient.removePlayer(state.info());
                 case Stop -> gameClient.showStop();
-                case Leaderboard -> gameClient.showLeaderboard(gson.fromJson(action.info(), LeaderboardInfo.class));
+                case Leaderboard -> gameClient.showLeaderboard(gson.fromJson(state.info(), LeaderboardInfo.class));
             }
         }
     }
@@ -75,7 +74,7 @@ public class ServerHandler extends Thread {
         }
     }
 
-    public void sendAction(Action.Type actionType) {
+    public void sendAction(org.example.shootergame.network.State.Type actionType) {
         try {
             String json = gson.toJson(actionType);
             out.writeUTF(json);

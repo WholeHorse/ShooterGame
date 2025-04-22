@@ -1,11 +1,11 @@
 package org.example.shootergame.server;
 
 import com.google.gson.Gson;
-import org.example.shootergame.network.Action;
+import org.example.shootergame.network.State;
 import org.example.shootergame.common.GameState;
 import org.example.shootergame.common.LeaderboardInfo;
 import org.example.shootergame.model.ArrowInfo;
-import org.example.shootergame.model.CircleInfo;
+import org.example.shootergame.model.TargetInfo;
 import org.example.shootergame.common.GameInfo;
 import org.example.shootergame.model.PlayerInfo;
 
@@ -64,8 +64,8 @@ public class GameServer {
     }
 
     private void sendRemove(PlayerInfo p) {
-        Action action = new Action(Action.Type.Remove, p.nickname);
-        String json = gson.toJson(action);
+        State state = new State(State.Type.Remove, p.nickname);
+        String json = gson.toJson(state);
         for (PlayerHandler h : handlerList) {
             h.sendMessage(json);
         }
@@ -103,15 +103,15 @@ public class GameServer {
 
     private void sendNewPlayer(PlayerInfo p) {
         String jsonPlayer = gson.toJson(p);
-        Action action = new Action(Action.Type.New, jsonPlayer);
-        String json = gson.toJson(action);
+        State state = new State(State.Type.New, jsonPlayer);
+        String json = gson.toJson(state);
         for (PlayerHandler h : handlerList) {
             h.sendMessage(json);
         }
     }
 
     public void sendWantToStart(PlayerHandler handler) {
-        Action wantToStart = new Action(Action.Type.WantToStart, handler.getPlayerInfo().nickname);
+        State wantToStart = new State(State.Type.WantToStart, handler.getPlayerInfo().nickname);
         String json = gson.toJson(wantToStart);
         for (PlayerHandler h : handlerList) {
             h.sendMessage(json);
@@ -125,9 +125,9 @@ public class GameServer {
     }
 
     private void sendState() {
-        String jsonState = gson.toJson(state);
-        Action action = new Action(Action.Type.State, jsonState);
-        String json = gson.toJson(action);
+        String jsonState = gson.toJson(this.state);
+        State state = new State(State.Type.State, jsonState);
+        String json = gson.toJson(state);
         for (PlayerHandler h : handlerList) {
             h.sendMessage(json);
         }
@@ -143,7 +143,7 @@ public class GameServer {
                     while (!isGameOver()) {
                         if (state == GameState.PAUSE) pause();
                         next();
-                        sendGameInfo(Action.Type.Update);
+                        sendGameInfo(State.Type.Update);
                         Thread.sleep(16);
                     }
                     sendWinner();
@@ -151,7 +151,7 @@ public class GameServer {
                     sendStop();
                 } finally {
                     resetInfo();
-                    sendGameInfo(Action.Type.Reset);
+                    sendGameInfo(State.Type.Reset);
                     state = GameState.OFF;
                     sendState();
                 }
@@ -162,8 +162,8 @@ public class GameServer {
     }
 
     private void sendStop() {
-        Action action = new Action(Action.Type.Stop, null);
-        String json = gson.toJson(action);
+        State state = new State(State.Type.Stop, null);
+        String json = gson.toJson(state);
         for (PlayerHandler h : handlerList) {
             h.sendMessage(json);
         }
@@ -181,8 +181,8 @@ public class GameServer {
         PlayerInfo winner = findWinner();
         winner.increaseWins();
         String jsonWinner = gson.toJson(winner);
-        Action action = new Action(Action.Type.Winner, jsonWinner);
-        String json = gson.toJson(action);
+        State state = new State(State.Type.Winner, jsonWinner);
+        String json = gson.toJson(state);
         for (PlayerHandler p : handlerList) {
             p.sendMessage(json);
         }
@@ -210,10 +210,10 @@ public class GameServer {
         return false;
     }
 
-    private void sendGameInfo(Action.Type type) {
+    private void sendGameInfo(State.Type type) {
         String jsonInfo = gson.toJson(gameInfo);
-        Action action = new Action(type, jsonInfo);
-        String json = gson.toJson(action);
+        State state = new State(type, jsonInfo);
+        String json = gson.toJson(state);
         for (PlayerHandler h : handlerList) {
             h.sendMessage(json);
         }
@@ -249,12 +249,12 @@ public class GameServer {
         }
     }
 
-    private void nextCirclePos(CircleInfo c) {
+    private void nextCirclePos(TargetInfo c) {
         if (c.y + c.radius + c.moveSpeed > height || c.y - c.radius - c.moveSpeed < 0.0) c.direction *= -1;
         c.y += c.direction * c.moveSpeed;
     }
 
-    boolean hit(ArrowInfo a, CircleInfo c) {
+    boolean hit(ArrowInfo a, TargetInfo c) {
         return sqrt((a.x + 45.0 - c.x) * (a.x + 45.0 - c.x) + (a.y - c.y) * (a.y - c.y)) < c.radius;
     }
 
@@ -299,8 +299,8 @@ public class GameServer {
     }
 
     public void sendWantToPause(PlayerHandler handler) {
-        Action action = new Action(Action.Type.WantToPause, handler.getPlayerInfo().nickname);
-        String json = gson.toJson(action);
+        State state = new State(State.Type.WantToPause, handler.getPlayerInfo().nickname);
+        String json = gson.toJson(state);
         for (PlayerHandler h : handlerList) {
             h.sendMessage(json);
         }
@@ -325,8 +325,8 @@ public class GameServer {
     public void sendLeaderboard(PlayerHandler handler) {
         LeaderboardInfo leaderboard = new LeaderboardInfo(PlayerInfo.getAllPlayers());
         String jsonInfo = gson.toJson(leaderboard);
-        Action action = new Action(Action.Type.Leaderboard, jsonInfo);
-        String json = gson.toJson(action);
+        State state = new State(State.Type.Leaderboard, jsonInfo);
+        String json = gson.toJson(state);
         handler.sendMessage(json);
     }
 }

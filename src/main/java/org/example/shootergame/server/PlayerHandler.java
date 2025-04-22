@@ -1,6 +1,5 @@
 package org.example.shootergame.server;
 
-import org.example.shootergame.network.Action;
 import org.example.shootergame.model.PlayerInfo;
 
 import java.io.DataInputStream;
@@ -52,7 +51,7 @@ public class PlayerHandler extends Thread {
     private void handlingMessage() throws IOException {
         while (true) {
             String msg = in.readUTF();
-            Action.Type actionType = gson.fromJson(msg, Action.Type.class);
+            org.example.shootergame.network.State.Type actionType = gson.fromJson(msg, org.example.shootergame.network.State.Type.class);
             switch (actionType) {
                 case WantToStart:
                     playerInfo.wantToStart = true;
