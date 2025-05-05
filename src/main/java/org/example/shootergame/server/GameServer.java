@@ -1,6 +1,7 @@
 package org.example.shootergame.server;
 
 import com.google.gson.Gson;
+import org.example.shootergame.db.SessionFactoryBuilder;
 import org.example.shootergame.network.State;
 import org.example.shootergame.common.GameState;
 import org.example.shootergame.common.LeaderboardInfo;
@@ -36,10 +37,14 @@ public class GameServer {
 
 
     public static void main(String[] args) {
+        // Initialize the SessionFactory
+        SessionFactoryBuilder.getSessionFactory();
+
         GameServer server = new GameServer();
         server.start(7777);
     }
 
+    // Rest of the code remains unchanged
     public void start(int port) {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             while (true) {
@@ -51,6 +56,7 @@ public class GameServer {
         }
     }
 
+    // ... Rest of the existing methods ...
     public void removePlayer(PlayerHandler handler) {
         handlerList.remove(handler);
         if (handler.getPlayerInfo() != null) {

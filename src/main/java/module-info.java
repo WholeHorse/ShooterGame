@@ -11,9 +11,15 @@ open module org.example.shootergame {
     requires eu.hansolo.tilesfx;
     requires com.google.gson;
 
+    requires org.hibernate.orm.core;
+    requires jakarta.persistence;
+    requires java.naming;
+    requires java.sql;
+
     exports org.example.shootergame.client;
     exports org.example.shootergame.server;
     exports org.example.shootergame.common;
     exports org.example.shootergame.model;
     exports org.example.shootergame.network;
+    exports org.example.shootergame.db;
 }
