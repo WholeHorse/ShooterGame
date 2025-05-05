@@ -4,7 +4,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="180.0" spacing="10.0" style="-fx-background-color: #eff1f5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.shootergame.client.WelcomeController">
+<VBox alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="250.0" spacing="10.0" style="-fx-background-color: #eff1f5;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.shootergame.client.WelcomeController">
    <children>
       <TextField fx:id="nicknameField" promptText="Введите имя игрока" style="-fx-background-color: #fff8e7; -fx-text-fill: #4c4f69; -fx-border-color: #000000;" />
       <Button mnemonicParsing="false" onAction="#onConnectButtonClick" style="-fx-background-color: #fff8e7; -fx-border-color: #000000;" text="Присоединиться" textFill="#4c4f69" />

@@ -199,7 +199,6 @@ public class GameClient {
     public void updatePlayerWantToPause(final String nickname) {
         Platform.runLater(() -> {
             Label statusLabel = findStatusLabel(nickname);
-            // Переключаем статус между "на паузе" и "готов"
             if (statusLabel.getText().equals("Статус: пауза")) {
                 statusLabel.setText("Статус: готов");
             } else {
