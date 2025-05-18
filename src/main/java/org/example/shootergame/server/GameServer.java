@@ -85,6 +85,15 @@ public class GameServer {
     }
 
     public void addPlayer(String nickname, PlayerHandler handler) {
+        // Если это клиент для просмотра таблицы лидеров
+        if (nickname.equals("__leaderboard_viewer__")) {
+            handlerList.add(handler);
+            // Сразу отправляем таблицу лидеров
+            sendLeaderboard(handler);
+            return;
+        }
+
+        // Обычная логика для игроков
         String color = colors[rand.nextInt(colors.length)];
         while (containsColor(color)) color = colors[rand.nextInt(colors.length)];
 
@@ -318,6 +327,13 @@ public class GameServer {
 
     public String canPlayerConnect(String nickname) {
         String response = "OK";
+
+        // Специальная проверка для приложения на Android - клиент только для просмотра лидеров
+        if (nickname.equals("__leaderboard_viewer__")) {
+            return "OK";
+        }
+
+        // Стандартные проверки для игроков
         if (containsNickname(nickname))
             response = "Имя " + nickname + " уже используется, введите другое.\n";
         if (gameInfo.playerList.size() == 4)
